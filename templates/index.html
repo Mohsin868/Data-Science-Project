@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Productivity Sentinel | Advanced Behavioral Analysis</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-glow: rgba(99, 102, 241, 0.5);
+            --accent: #10b981;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+                url('/background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #f8fafc;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .overlay {
+            min-height: 100vh;
+            background: rgba(15, 23, 42, 0.4);
+            backdrop-filter: blur(8px);
+            padding: 4rem 1rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to right, #fff, #94a3b8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 1rem;
+        }
+
+        .header .subtitle {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .main-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 2rem;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: #6366f1;
+            margin-bottom: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .input-group select {
+            width: 100%;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--glass-border);
+            border-radius: 1rem;
+            padding: 1rem;
+            color: #f8fafc;
+            font-size: 1rem;
+            outline: none;
+            transition: all 0.3s ease;
+            appearance: none;
+            cursor: pointer;
+        }
+
+        .input-group select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-glow);
+        }
+
+        .input-group:hover select {
+            border-color: rgba(99, 102, 241, 0.4);
+        }
+
+        .submit-btn {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            color: white;
+            padding: 1.25rem;
+            border-radius: 1rem;
+            border: none;
+            font-size: 1.125rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            margin-top: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.4);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.5);
+            filter: brightness(1.1);
+        }
+
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1.5rem;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 1.5rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .stat-item h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+
+        .stat-item p {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            font-weight: 600;
+        }
+
+        .footer {
+            margin-top: 4rem;
+            text-align: center;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .header h1 { font-size: 2.5rem; }
+            .main-card { padding: 1.5rem; }
+        }
+
+        .loading-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(99, 102, 241, 0.2);
+            border-top-color: #6366f1;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="loading-overlay" id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <div class="overlay">
+        <div class="container">
+            <header class="header">
+                <h1>Behavioral AI Sentinel</h1>
+                <p class="subtitle">Next-generation predictive engine analyzing digital consumption patterns to optimize human potential.</p>
+            </header>
+
+            <main class="main-card">
+                <form action="/predict" method="POST" id="predictForm">
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Demographic</label>
+                            <select name="age_group" required>
+                                <option value="">Select Age Group</option>
+                                {% for age in age_groups %}
+                                <option value="{{ age }}">{{ age }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Gender Profile</label>
+                            <select name="gender" required>
+                                <option value="">Select Gender</option>
+                                {% for gender in genders %}
+                                <option value="{{ gender }}">{{ gender }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Academic Status</label>
+                            <select name="education_level" required>
+                                <option value="">Select Education</option>
+                                {% for edu in education_levels %}
+                                <option value="{{ edu }}">{{ edu }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Professional Path</label>
+                            <select name="occupation" required>
+                                <option value="">Select Occupation</option>
+                                {% for occ in occupations %}
+                                <option value="{{ occ }}">{{ occ }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Primary Interface</label>
+                            <select name="device" required>
+                                <option value="">Select Device</option>
+                                {% for device in devices %}
+                                <option value="{{ device }}">{{ device }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Content Vector</label>
+                            <select name="screen_activity" required>
+                                <option value="">Select Activity</option>
+                                {% for activity in screen_activities %}
+                                <option value="{{ activity }}">{{ activity }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Application Domain</label>
+                            <select name="app_category" required>
+                                <option value="">Select Category</option>
+                                {% for category in app_categories %}
+                                <option value="{{ category }}">{{ category }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Usage Window</label>
+                            <select name="time_period" required>
+                                <option value="">Select Period</option>
+                                {% for period in time_periods %}
+                                <option value="{{ period }}">{{ period }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Spatial Context</label>
+                            <select name="environment" required>
+                                <option value="">Select Environment</option>
+                                {% for env in environments %}
+                                <option value="{{ env }}">{{ env }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Focus Protocol</label>
+                            <select name="notification_handling" required>
+                                <option value="">Select Strategy</option>
+                                {% for strategy in notification_handlings %}
+                                <option value="{{ strategy }}">{{ strategy }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="input-group">
+                            <label>Cognitive Duration</label>
+                            <select name="attention_span" required>
+                                <option value="">Select Duration</option>
+                                {% for span in attention_spans %}
+                                <option value="{{ span }}">{{ span }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <button type="submit" class="submit-btn">Execute Analysis</button>
+                    </div>
+                </form>
+
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <h3>~86%</h3>
+                        <p>Confidence Level</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>11</h3>
+                        <p>Neural Vectors</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>Real-time</h3>
+                        <p>Processing</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>ExtraTrees</h3>
+                        <p>Architecture</p>
+                    </div>
+                </div>
+            </main>
+
+            <footer class="footer">
+                <p>Architected for Excellence • Behavioral Science x Machine Learning</p>
+                <p style="margin-top: 0.5rem;">© {{ current_year }} AI Productivity Sentinel</p>
+            </footer>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('predictForm').addEventListener('submit', function() {
+            document.getElementById('loader').style.display = 'flex';
+        });
+    </script>
+</body>
+</html>

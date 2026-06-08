@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis Report | AI Productivity Sentinel</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --accent: #10b981;
+            --bg-dark: #0f172a;
+            --card-bg: rgba(30, 41, 59, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-dark);
+            background-image: url('/background.png');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+
+        .overlay {
+            min-height: 100vh;
+            background: rgba(15, 23, 42, 0.5);
+            backdrop-filter: blur(10px);
+            padding: 3rem 1rem;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .result-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(25px);
+            border: 1px solid var(--glass-border);
+            border-radius: 2.5rem;
+            padding: 3rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
+            margin-bottom: 2rem;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid var(--glass-border);
+            padding-bottom: 1.5rem;
+        }
+
+        .header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .back-link {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--primary);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .prediction-box {
+            background: rgba(15, 23, 42, 0.4);
+            padding: 2rem;
+            border-radius: 2rem;
+            border: 1px solid var(--glass-border);
+        }
+
+        .prediction-box label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: #6366f1;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+        }
+
+        .prediction-box .value {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .viz-container {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 2rem;
+            padding: 1.5rem;
+            border: 1px solid var(--glass-border);
+            text-align: center;
+        }
+
+        .viz-container img {
+            max-width: 100%;
+            border-radius: 1rem;
+        }
+
+        .input-summary {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 2rem;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .input-summary h3 {
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            color: #94a3b8;
+        }
+
+        .tag-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+        }
+
+        .tag {
+            background: rgba(99, 102, 241, 0.1);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.875rem;
+            color: #e2e8f0;
+        }
+
+        .confidence-meter {
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+            border-radius: 1rem;
+            text-align: center;
+        }
+
+        .confidence-meter span {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 1.25rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid { grid-template-columns: 1fr; }
+            .result-card { padding: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="overlay">
+        <div class="container">
+            <main class="result-card">
+                <header class="header">
+                    <h1>Analysis Report</h1>
+                    <a href="/" class="back-link">← New Analysis</a>
+                </header>
+
+                <div class="grid">
+                    <div class="prediction-box">
+                        <label>Forecasted Screen Time</label>
+                        <div class="value">{{ prediction.predicted_screen_time }}</div>
+                        
+                        <div style="margin-top: 2rem;"></div>
+                        
+                        <label>Productivity Classification</label>
+                        <div class="value">{{ prediction.predicted_productivity }}</div>
+
+                        <div class="confidence-meter">
+                            AI Confidence: <span>{{ prediction.confidence }}%</span>
+                        </div>
+                    </div>
+
+                    <div class="viz-container">
+                        <img src="data:image/png;base64,{{ viz_img }}" alt="Visualization">
+                    </div>
+                </div>
+
+                <div class="input-summary">
+                    <h3>Analyzed Vectors</h3>
+                    <div class="tag-cloud">
+                        {% for key, value in user_input.items() %}
+                        <div class="tag"><strong>{{ key }}:</strong> {{ value }}</div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>
